@@ -21,6 +21,7 @@ class UI{
 				'isbn':583958574
 			}
 		];
+		
 		storedBooks.forEach((book) => UI.addBookToList(book));
 	}
 
@@ -39,4 +40,16 @@ class UI{
 
 }
 
-document.addEventListner("DOMContetntLoaded",UI.displayBooks());
+document.addEventListener("DOMContetntLoaded",UI.displayBooks());
+
+document.getElementById('book-form').addEventListener('submit',(e)=>{
+	
+	e.preventDefault();
+	console.log('here');
+	const title = document.querySelector('#title').value;
+	const author = document.querySelector('#author').value;
+	const isbn = document.querySelector('#isbn').value;
+
+	const book = new Book(title,author,isbn);
+	UI.addBookToList(book);
+});
