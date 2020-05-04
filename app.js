@@ -75,6 +75,7 @@ document.getElementById('book-form').addEventListener('submit',(e)=>{
 	else{
 	const book = new Book(title,author,isbn);
 	UI.addBookToList(book);
+	UI.showAlert('Book added successfully','success');
 	UI.clearFields();
 	}
 	
