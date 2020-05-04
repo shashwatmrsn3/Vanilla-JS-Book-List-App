@@ -1,3 +1,5 @@
+// Classes
+
 class Book{
 	constructor(title,author,isbn){
 		this.title = title;
@@ -9,20 +11,9 @@ class Book{
 class UI{
 	
 	static displayBooks (){
-		const storedBooks = [
-			{
-				'title':'The power of now',
-				'author':'Ekart',
-				'isbn':483973895
-			},
-			{
-				'title':'The monk who sold his ferrari',
-				'author':'Robin Sharma',
-				'isbn':583958574
-			}
-		];
+		const books = Store.getBooks();
 		
-		storedBooks.forEach((book) => UI.addBookToList(book));
+		books.forEach((book) => UI.addBookToList(book));
 	}
 
 
@@ -62,6 +53,36 @@ class UI{
 	}
 }
 
+
+class Store{
+	
+	static getBooks(){
+		let books;
+		if(localStorage.getItem('books')===null) books = [];
+		else{
+			books = JSON.parse(localStorage.getItem('books'));
+		}
+		return books;
+	}
+
+	static addBook(book){
+		let books  = Store.getBooks();
+		books.push(book);
+		localStorage.setItem('books',JSON.stringify(books));
+	}
+
+	static removeBook(isbn){
+		const books = Store.getBooks();
+		books.forEach((book,index)=>{
+			if(book.isbn === isbn){
+				books.splice(index,1);
+			}
+		});
+		localStorage.setItem('books',JSON.stringify(books));
+	}
+}
+
+
 document.addEventListener("DOMContetntLoaded",UI.displayBooks());
 
 document.getElementById('book-form').addEventListener('submit',(e)=>{
@@ -75,6 +96,7 @@ document.getElementById('book-form').addEventListener('submit',(e)=>{
 	else{
 	const book = new Book(title,author,isbn);
 	UI.addBookToList(book);
+	Store.addBook(book);
 	UI.showAlert('Book added successfully','success');
 	UI.clearFields();
 	}
@@ -84,4 +106,6 @@ document.getElementById('book-form').addEventListener('submit',(e)=>{
 document.getElementById('book-list').addEventListener('click',(e) => {
 	console.log(e.target);
 	UI.deleteBook(e.target);
+	Store.removeBook(e.target.parentElement.previousElementSibling.textContent);
+	UI.showAlert('Book removed','success');
 })
