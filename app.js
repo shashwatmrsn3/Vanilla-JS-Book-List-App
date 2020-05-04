@@ -33,9 +33,22 @@ class UI{
 			<td>${book.title}</td>
 			<td>${book.author}</td>
 			<td>${book.isbn}</td>
-			<td><a href = "#" class = "btn btn-danger">Delete</a></td>
+			<td><a href = "#" class = "btn btn-danger delete">Delete</a></td>
 		`;
 		list.appendChild(row);
+	}
+
+	static clearFields(){
+		 document.getElementById('author').value = '';
+		 document.getElementById('title').value = '';
+		 document.getElementById('isbn').value = '';
+		
+	}
+
+	static deleteBook(element){
+		if(element.classList.contains('delete')){
+			element.parentElement.parentElement.remove();
+		};
 	}
 
 }
@@ -52,4 +65,10 @@ document.getElementById('book-form').addEventListener('submit',(e)=>{
 
 	const book = new Book(title,author,isbn);
 	UI.addBookToList(book);
+	UI.clearFields();
 });
+
+document.getElementById('book-list').addEventListener('click',(e) => {
+	console.log(e.target);
+	UI.deleteBook(e.target);
+})
